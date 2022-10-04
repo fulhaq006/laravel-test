@@ -37,7 +37,61 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+        Schema::create('movie', function($table) {
+            $table->increments('id');
+            $table->string('movie_name');
+            $table->timestamps();
+        });
+
+        Schema::create('shows', function($table) {
+            $table->increments('id');
+            $table->string('show_name');
+            $table->integer('movie_id')->unsigned()->nullable();
+            $table->foreign('movie_id')->references('id')->on('movie');
+            $table->timestamps();
+        });
+
+        Schema::create('show_times', function($table) {
+            $table->increments('id');
+            $table->dateTime('show_time');
+            $table->integer('show_id')->unsigned()->nullable();
+            $table->foreign('show_id')->references('id')->on('shows');
+            $table->timestamps();
+        });
+
+        Schema::create('show_locations', function($table) {
+            $table->increments('id');
+            $table->string('show_location');
+            $table->integer('show_time_id')->unsigned()->nullable();
+            $table->foreign('show_time_id')->references('id')->on('show_time');
+            $table->timestamps();
+        });
+
+        Schema::create('show_pricing', function($table) {
+            $table->increments('id');
+            $table->float('show_prince');
+            $table->integer('show_id')->unsigned()->nullable();
+            $table->foreign('show_id')->references('id')->on('shows');
+            $table->timestamps();
+        });
+
+        Schema::create('seat_category', function($table) {
+            $table->increments('id');
+            $table->string('seat_category');
+            $table->float('seat_premium');
+            $table->timestamps();
+        });
+
+        Schema::create('show_seating', function($table) {
+            $table->increments('id');
+            $table->string('show_seat');
+            $table->integer('seat_category_id')->unsigned()->nullable();
+            $table->foreign('seat_category_id')->references('id')->on('seat_category');
+            $table->timestamps();
+        });
+
+
+        //throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
     }
 
     /**
